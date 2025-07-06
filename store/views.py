@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import Product
+from .models import Category, Product
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -68,4 +68,16 @@ def register_user(request):
 def product(request, pk):
     product = Product.objects.get(id=pk)
     return render(request, 'product.html', {'product': product})
+
+def category(request, foo):
+    # replace Hyphens with Spaces
+    foo = foo.replace('-', ' ')
+    # Grab the Category from the URL
+    try:
+         category = Category.objects.get(name=foo)
+         products = Product.objects.filter(category=category)
+         return render(request, 'category.html', {'category': category, 'products': products})
+    except:
+        messages.error(request, "Category not found.")
+        return redirect('home')
 
