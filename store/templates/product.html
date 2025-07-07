@@ -33,6 +33,11 @@
                                 <a href="{% url 'home' %}" class="btn btn-outline-secondary">
                                     Home
                                 </a>
+                                <button class="btn btn-outline-secondary" id="add-cart" value="{{ product.id }}">
+                                    <i class="bi-cart-fill me-1"></i>
+                                    Add to Cart
+                                </button>
+                                
                     </center>
                 </div>
             </div>
@@ -40,5 +45,33 @@
     </div>
 </div>
 <br /><br /><br /><br /><br /><br />
+
+<script>
+
+$(document).on('click', "#add-cart", function(e){
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "{% url 'cart_add' 0 %}".replace('0', product_id),
+        data: {
+            product_id: $('add-cart').val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'
+        },
+        success: function(response) {
+            if (response.status === 'success') {
+                alert('Product added to cart successfully!');
+            } else {
+                alert('Failed to add product to cart.');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+            alert('An error occurred while adding the product to the cart.');
+        }
+    });
+})
+</script>
+
 
 {% endblock %}
