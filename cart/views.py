@@ -8,7 +8,7 @@ def cart_summary(request):
     return render(request, 'cart_summary.html', {})
 
 
-def cart_add(request, product_id):
+def cart_add(request):
     # Get the cart 
     cart = Cart(request)
     #test for POST
